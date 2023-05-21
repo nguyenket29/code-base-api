@@ -1,11 +1,9 @@
 package com.java.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@Getter
 public class APIException extends RuntimeException {
 
     private HttpStatus httpStatus;
@@ -35,5 +33,22 @@ public class APIException extends RuntimeException {
     public APIException withMessage(List<String> data) {
         this.data = data;
         return this;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public List<String> getData() {
+        return data;
     }
 }

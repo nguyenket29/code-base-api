@@ -1,0 +1,34 @@
+#Config database authentication
+datasource.auth.url: jdbc:mysql://localhost:3306/database_base
+datasource.auth.username: root
+datasource.auth.password: 2vkDM0CGFbS3x2T2wmxa5Kpwrs4H/s26zn7CN+YMkdTeczcdIUVCAAPqMP5HxQ==
+datasource.auth.driver-class-name: com.mysql.cj.jdbc.Driver
+datasource.auth.packageScan : com.java
+datasource.auth.repository.packageScan : com.java
+datasource.auth.hibernate.ddl-auto: update
+
+inventory.logs.path: ./logs/development
+app.aes.secret: MTIzcnVnaHRhbmtobW91dA==
+upload.path: ./uploads/
+qrcode.path: ./qrcodes/
+file.path: files/
+
+settings:
+  firebase:
+    fcm:
+      setting-filename: /firebase-adminsdk.json
+
+server:
+  port: 8083
+spring:
+  config:
+    use-legacy-processing: true
+  profiles:
+    include: common
+  jpa:
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+

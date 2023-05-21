@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Data
 public class PageDataResponse<E> {
     private String totalElements;
     private List<E> data;
@@ -22,5 +21,21 @@ public class PageDataResponse<E> {
         rs.setTotalElements(String.valueOf(page.getTotalElements()));
         rs.setData(page.getContent());
         return rs;
+    }
+
+    public String getTotalElements() {
+        return totalElements;
+    }
+
+    public void setTotalElements(String totalElements) {
+        this.totalElements = totalElements;
+    }
+
+    public List<E> getData() {
+        return data;
+    }
+
+    public void setData(List<E> data) {
+        this.data = data;
     }
 }
