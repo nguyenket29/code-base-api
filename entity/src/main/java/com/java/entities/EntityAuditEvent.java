@@ -10,7 +10,6 @@ import java.time.Instant;
 @Entity
 @Table(name = "entity_audit_event")
 public class EntityAuditEvent implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id

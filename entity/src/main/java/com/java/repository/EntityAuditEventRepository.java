@@ -1,4 +1,4 @@
-package com.java;
+package com.java.repository;
 
 import com.java.entities.EntityAuditEvent;
 import org.springframework.data.domain.Page;

@@ -2,16 +2,15 @@ package com.java;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.java.log.EntityAuditEventListener;
+import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -22,9 +21,18 @@ import java.time.Instant;
 
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class, EntityAuditEventListener.class})
-@JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
+@JsonIgnoreProperties(value = {"createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate"}, allowGetters = true)
 public abstract class AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id")
+    private String id;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
@@ -45,6 +53,14 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Version
     @Column(name = "version")
     private Long version = 0L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCreatedBy() {
         return createdBy;

@@ -2,7 +2,7 @@ package com.java.log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.AbstractAuditingEntity;
-import com.java.EntityAuditEventRepository;
+import com.java.repository.EntityAuditEventRepository;
 import com.java.entities.EntityAuditEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +109,7 @@ public class AsyncEntityAuditEventWriter {
     }
 
     private static String getEntityName(String name) {
-        return "domain" + name.split("domain")[1];
+        return "java" + name.split("java")[1];
     }
 
 }
