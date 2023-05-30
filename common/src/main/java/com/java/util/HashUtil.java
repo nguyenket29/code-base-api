@@ -65,6 +65,6 @@ public final class HashUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(HashUtil.aesEncrypt("Nguyenvietket2906@", AES_SECRET));
+        System.out.println(HashUtil.aesEncrypt("Nguyenvietket2906", AES_SECRET));
     }
 }

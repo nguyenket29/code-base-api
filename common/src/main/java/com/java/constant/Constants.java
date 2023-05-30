@@ -19,4 +19,6 @@ public class Constants {
 
     public static final String ATTRIBUTE_DELIMITER = "#_@_@_#";
     public static final String FORMAT_DATE = "dd/MM/YYYY";
+
+    public static final String UNAUTHORIZED = "error.unauthorized";
 }

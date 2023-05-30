@@ -1,7 +1,7 @@
 #Config database authentication
-datasource.auth.url: jdbc:mysql://localhost:3306/database_base
+datasource.auth.url: jdbc:mysql://localhost:2906/database_base
 datasource.auth.username: root
-datasource.auth.password: 2vkDM0CGFbS3x2T2wmxa5Kpwrs4H/s26zn7CN+YMkdTeczcdIUVCAAPqMP5HxQ==
+datasource.auth.password: tLS7S/7V1Bi7VdQHTRYAJ/4b4SUY1n3EM/UkPEu9qjIruYT27VSeWhGkBX/l
 datasource.auth.driver-class-name: com.mysql.cj.jdbc.Driver
 datasource.auth.packageScan : com.java.entities
 datasource.auth.repository.packageScan : com.java
@@ -20,7 +20,17 @@ settings:
 server:
   port: 8085
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   config:
     use-legacy-processing: true
   profiles:
     include: common
+
+#jwt
+jwt:
+  secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expiration: 86400000 # a day
+  refresh-token:
+    expiration: 604800000 # 7 days

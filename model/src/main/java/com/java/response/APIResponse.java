@@ -65,6 +65,14 @@ public class APIResponse<T> {
         return ret;
     }
 
+    public static <T> APIResponse<T> failed(int errorCode , String message) {
+        APIResponse<T> res = new APIResponse<T>();
+        res.statusCode = Constants.StatusCode.FAILED;
+        res.errorCode = errorCode;
+        res.errorMessage = message;
+        return res;
+    }
+
     public static <T> APIResponse<T> failed(int errorCode, T dataErrorMessage, String errorMessage) {
         APIResponse<T> ret = new APIResponse<>();
         ret.statusCode = Constants.StatusCode.FAILED;
