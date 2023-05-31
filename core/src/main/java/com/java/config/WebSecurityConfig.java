@@ -1,5 +1,10 @@
 package com.java.config;
 
+import com.java.UserService;
+import com.java.auth.JWTAuthorizationFilter;
+import com.java.auth.JWTAuthenticationFilter;
+import com.java.impl.UserDetailServiceImpl;
+import com.java.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,9 +25,16 @@ import static com.java.common.Commons.PUBLIC_URLs;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final EntryPointAuthenticationConfig entryPointConfig;
+    private final JwtUtil jwtUtil;
+    private final UserDetailServiceImpl userDetailService;
+    private final UserService authService;
 
-    public WebSecurityConfig(EntryPointAuthenticationConfig entryPointConfig) {
+    public WebSecurityConfig(EntryPointAuthenticationConfig entryPointConfig,
+                             JwtUtil jwtUtil, UserDetailServiceImpl userDetailService, UserService authService) {
         this.entryPointConfig = entryPointConfig;
+        this.jwtUtil = jwtUtil;
+        this.userDetailService = userDetailService;
+        this.authService = authService;
     }
 
     @Override
@@ -34,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().logout()
                 .and().csrf().disable()
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), bCryptPasswordEncoder(), jwtUtil, userDetailService))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, authService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic().authenticationEntryPoint(entryPointConfig);
     }

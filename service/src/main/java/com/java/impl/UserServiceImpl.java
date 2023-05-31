@@ -37,13 +37,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable("users")
-    public List<String> getRoleByUserId(String userId) {
+    public List<RoleEntity> getRoleByUserId(String userId) {
         List<String> roleIds = userRoleRepository.findAllByUserId(userId)
                 .stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(roleIds)) {
-            return roleRepository.findAllByIdIn(roleIds)
-                    .stream().map(RoleEntity::getName).collect(Collectors.toList());
+            return roleRepository.findAllByIdIn(roleIds);
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    @Cacheable("users")
+    public Optional<UserEntity> findByUsernameAndStatus(String username, short status) {
+        return userRepository.findByUsernameAndStatus(username, status);
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
     }
 }

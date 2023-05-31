@@ -1,6 +1,8 @@
 package com.java.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.entities.auth.CustomUser;
+import com.java.impl.UserDetailServiceImpl;
 import com.java.request.LoginRequest;
 import com.java.util.JwtUtil;
 import org.slf4j.Logger;
@@ -21,17 +23,20 @@ import java.util.ArrayList;
 
 import static com.java.common.Commons.*;
 
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     private AuthenticationManager authenticationManager;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserDetailServiceImpl userDetailService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder, JwtUtil jwtUtil) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder,
+                                   JwtUtil jwtUtil, UserDetailServiceImpl userDetailService) {
         this.authenticationManager = authenticationManager;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.jwtUtil = jwtUtil;
+        this.userDetailService = userDetailService;
         setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(LOGIN_URL, "POST"));
     }
 
@@ -54,11 +59,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-                                            Authentication auth) {
-        String token = jwtUtil.generateToken(auth.getName());
-        if (jwtUtil.validateJwtToken(token)) {
-            res.addHeader(AUTH_HEADER, TOKEN_PREFIX + token);
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
+                                            FilterChain chain, Authentication auth) {
+        if (auth.isAuthenticated()) {
+            CustomUser customUser = (CustomUser) userDetailService.loadUserByUsername(auth.getName());
+            String token = jwtUtil.generateToken(customUser.getUserName(), customUser.getAuthorities(),
+                    customUser.getFullName(), customUser.getPaths(), customUser.getId());
+            if (jwtUtil.validateJwtToken(token)) {
+                res.addHeader(AUTH_HEADER, TOKEN_PREFIX + token);
+            }
         }
     }
 }

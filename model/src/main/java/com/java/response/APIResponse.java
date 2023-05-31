@@ -7,107 +7,96 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.java.constant.Constants;
 
 import java.util.List;
+import java.util.Map;
+
+import static com.java.constant.Constants.StatusCode.FAILED;
+import static com.java.constant.Constants.StatusCode.SUCCESS;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"status", "message", "data"})
 public class APIResponse<T> {
-    @JsonProperty(value = "status")
-    private String statusCode;
+    @JsonProperty("status")
+    private String status;
+
+    @JsonProperty("code")
+    private String code;
+
     @JsonProperty("message")
     private String message;
-    @JsonProperty("dataErrorMessages")
-    private T dataErrorMessages;
-    @JsonProperty("errorMessage")
-    private String errorMessage;
+
+    @JsonProperty("errors")
+    private List<Map<String, String>> errors;
+
     @JsonProperty("data")
     private T data;
-    @JsonProperty("error_code")
-    private Integer errorCode;
-    @JsonProperty("error_code_custom")
-    private Integer errorCodeCustom;
-    @JsonProperty("dataError")
-    private List<String> dataError;
 
-    public List<String> getDataError() {
-        return dataError;
+    @JsonProperty("dataErrorMessages")
+    private T dataErrorMessages;
+
+
+    public APIResponse() {
     }
 
-    public void setDataError(List<String> dataError) {
-        this.dataError = dataError;
-    }
-
-    public Integer getErrorCodeCustom() {
-        return errorCodeCustom;
-    }
-
-    public void setErrorCodeCustom(Integer errorCodeCustom) {
-        this.errorCodeCustom = errorCodeCustom;
-    }
-
-    public static <T> APIResponse<T> success(T data) {
-        APIResponse<T> ret = new APIResponse<>();
-        ret.statusCode = Constants.StatusCode.SUCCESS;
-        ret.data = data;
-        return ret;
-    }
-
-    public static <T> APIResponse<T> success() {
-        APIResponse<T> ret = new APIResponse<>();
-        ret.statusCode = Constants.StatusCode.SUCCESS;
-        return ret;
-    }
-
-    public static <T> APIResponse<T> success(T data, String message) {
-        APIResponse<T> ret = new APIResponse<>();
-        ret.message = message;
-        ret.statusCode = Constants.StatusCode.SUCCESS;
-        ret.data = data;
-        return ret;
-    }
-
-    public static <T> APIResponse<T> failed(int errorCode , String message) {
+    public static <T> APIResponse<T> ok(T data) {
         APIResponse<T> res = new APIResponse<T>();
-        res.statusCode = Constants.StatusCode.FAILED;
-        res.errorCode = errorCode;
-        res.errorMessage = message;
+        res.status = SUCCESS;
+        res.data = data;
         return res;
     }
 
-    public static <T> APIResponse<T> failed(int errorCode, T dataErrorMessage, String errorMessage) {
+    public static <T> APIResponse<T> ok() {
+        APIResponse<T> res = new APIResponse<T>();
+        res.status = SUCCESS;
+        return res;
+    }
+
+
+    public static <T> APIResponse<T> failed(String code , String message) {
+        APIResponse<T> res = new APIResponse<T>();
+        res.status = FAILED;
+        res.code = code;
+        res.message = message;
+        return res;
+    }
+
+    public static <T> APIResponse<T> failed(String message) {
+        APIResponse<T> res = new APIResponse<T>();
+        res.status = FAILED;
+        res.message = message;
+        return res;
+    }
+
+    public static <T> APIResponse<T> failed(String code , String message, List<Map<String, String>> errors) {
+        APIResponse<T> res = new APIResponse<T>();
+        res.status = FAILED;
+        res.code = code;
+        res.message = message;
+        res.errors = errors;
+        return res;
+    }
+
+    public static <T> APIResponse<T> failed(int code, String messages) {
         APIResponse<T> ret = new APIResponse<>();
-        ret.statusCode = Constants.StatusCode.FAILED;
-        ret.dataErrorMessages = dataErrorMessage;
-        ret.errorMessage = errorMessage;
-        ret.errorCode = errorCode;
+        ret.status = FAILED;
+        ret.code = String.valueOf(code);
+        ret.message = messages;
         return ret;
     }
 
-    public static <T> APIResponse<T> failedCustom(Integer errorCode,
-                          T dataErrorMessage, String errorMessage, Integer errorCodeCustom, List<String> dataError) {
-        APIResponse<T> ret = new APIResponse<>();
-        ret.statusCode = Constants.StatusCode.FAILED;
-        ret.dataErrorMessages = dataErrorMessage;
-        ret.errorMessage = errorMessage;
-        ret.errorCode = errorCode;
-        ret.errorCodeCustom = errorCodeCustom;
-        ret.dataError = dataError;
-        return ret;
+    public String getStatus() {
+        return status;
     }
 
-    public Integer getErrorCode() {
-        return errorCode;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setErrorCode(Integer errorCode) {
-        this.errorCode = errorCode;
+    public String getCode() {
+        return code;
     }
 
-    public String getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMessage() {
@@ -118,19 +107,19 @@ public class APIResponse<T> {
         this.message = message;
     }
 
+    public List<Map<String, String>> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<Map<String, String>> errors) {
+        this.errors = errors;
+    }
+
     public T getData() {
         return data;
     }
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public T getDataErrorMessages() {
-        return dataErrorMessages;
-    }
-
-    public void setDataErrorMessages(T dataErrorMessages) {
-        this.dataErrorMessages = dataErrorMessages;
     }
 }

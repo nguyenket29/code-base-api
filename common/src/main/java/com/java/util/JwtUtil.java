@@ -6,13 +6,12 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -43,11 +42,22 @@ public class JwtUtil {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities,
+                                String fullName, List<String> paths, String userId) {
+        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("typ", "JWT");
+        claims.put("authorities", authorities);
+        claims.put("uid", userId);
+        claims.put("fullName", fullName);
+        claims.put("paths", paths);
+        claims.put("userName", username);
+
         return Jwts
                 .builder()
-                .setClaims(new HashMap<>())
                 .setSubject(username)
+                .setHeader(headers)
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -82,7 +92,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -98,7 +108,9 @@ public class JwtUtil {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
+            Jwts.parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build().parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
