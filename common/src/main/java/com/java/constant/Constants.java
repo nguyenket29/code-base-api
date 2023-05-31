@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Constants {
     public static final String ANONYMOUS = "Anonymous";
+    public static final String DEFAULT_ROLE = "DEFAULT";
 
     public static final String AES_SECRET = "MTIzcnVnaHRhbmtobW91dA==";
 

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.java.common.Commons.*;
+import static com.java.constant.Constants.DEFAULT_ROLE;
 import static com.java.constant.ErrorConstants.ACCESS_DENIED;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {

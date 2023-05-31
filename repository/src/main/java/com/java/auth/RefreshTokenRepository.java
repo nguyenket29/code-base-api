@@ -1,17 +1,16 @@
 package com.java.auth;
 
-import com.java.entities.auth.RoleEntity;
+import com.java.entities.auth.RefreshTokenEntity;
+import com.java.entities.auth.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
  * Spring Data JPA repository for the EntityAuditEvent entity.
  */
 @Repository
-public interface RoleRepository extends JpaRepository<RoleEntity, String> {
-    List<RoleEntity> findAllByIdIn(List<String> roleIds);
-    Optional<RoleEntity> findByCode(String code);
+public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, String> {
+    Optional<RefreshTokenEntity> findByToken(String token);
 }

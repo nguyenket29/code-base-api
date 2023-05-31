@@ -42,3 +42,14 @@ jwt:
   refresh-token:
     expiration: 604800000 # 7 days
 
+#token
+token:
+  email:
+    verification:
+      duration: 3600000
+  password:
+    reset:
+      duration: 3600000
+  refresh:
+    duration: 2592000000
+

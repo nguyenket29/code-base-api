@@ -31,8 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable("users")
-    public Optional<UserEntity> findByUserName(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<UserEntity> findById(String id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public UserEntity save(UserEntity user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -55,5 +60,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public boolean existsByUserName(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

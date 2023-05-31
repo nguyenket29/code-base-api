@@ -1,55 +1,13 @@
+package com.java.dto;
 
-package com.java.entities.auth;
-
-import com.java.AbstractAuditingEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "users")
-public class UserEntity extends AbstractAuditingEntity {
-    public static final class Gender {
-        public static final short MALE = 0;
-        public static final short FEMALE = 1;
-        public static final short OTHER = 2;
-    }
-
-    public static final class Status {
-        public static final short ACTIVE = 1;
-        public static final short WAITING = 0;
-        public static final short LOCK = -1;
-    }
-
-    @Column(name = "username")
+public class UserDTO {
     private String username;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "full_name")
     private String fullName;
-
-    @Column(name = "gender")
     private Short gender;
-
-    @Column(name = "status")
     private Short status;
-
-    @Column(name = "address")
     private String address;
-
-    @Column(name = "email")
     private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getUsername() {
         return username;
@@ -99,7 +57,11 @@ public class UserEntity extends AbstractAuditingEntity {
         this.address = address;
     }
 
-    public UserEntity() {
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
