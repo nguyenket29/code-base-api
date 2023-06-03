@@ -8,6 +8,7 @@ import com.java.request.*;
 import com.java.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,27 @@ public class AuthServiceImpl implements AuthService {
     private final UserRoleService userRoleService;
     private final RoleService roleService;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
     private final ResetPasswordTokenService resetPasswordTokenService;
 
     public AuthServiceImpl(UserService userService, UserMapper userMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoder, UserRoleService userRoleService, RoleService roleService, JwtUtil jwtUtil, ResetPasswordTokenService resetPasswordTokenService) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder, UserRoleService userRoleService, RoleService roleService, JwtUtil jwtUtil, RefreshTokenService refreshTokenService, ResetPasswordTokenService resetPasswordTokenService) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRoleService = userRoleService;
         this.roleService = roleService;
         this.jwtUtil = jwtUtil;
+        this.refreshTokenService = refreshTokenService;
         this.resetPasswordTokenService = resetPasswordTokenService;
     }
 
+    /**
+     * Create user with role default
+     *
+     * @param request
+     * @return
+     */
     @Override
     @Transactional
     public Optional<UserEntity> registerUser(RegistryRequest request) {
@@ -102,6 +111,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Optional<String> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
+        String refreshToken = jwtUtil.generateToken(customUser.getUserName(), customUser.getAuthorities(),
+                customUser.getFullName(), customUser.getPaths(), customUser.getId());
         return Optional.empty();
     }
 
