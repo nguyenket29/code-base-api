@@ -1,11 +1,13 @@
 package com.java.impl;
 
 import com.java.*;
+import com.java.context.SystemContextHolder;
 import com.java.entities.auth.*;
 import com.java.exception.APIException;
 import com.java.mapper.UserMapper;
 import com.java.request.*;
 import com.java.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.java.constant.Constants.DEFAULT_ROLE;
 import static com.java.constant.ErrorConstants.*;
@@ -28,6 +32,9 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final ResetPasswordTokenService resetPasswordTokenService;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     public AuthServiceImpl(UserService userService, UserMapper userMapper,
                            BCryptPasswordEncoder bCryptPasswordEncoder, UserRoleService userRoleService, RoleService roleService, JwtUtil jwtUtil, RefreshTokenService refreshTokenService, ResetPasswordTokenService resetPasswordTokenService) {
@@ -58,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(request.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
+        user.setStatus(UserEntity.Status.ACTIVE);
         UserEntity userEntity = userService.save(user);
 
         // save userRole default
@@ -106,20 +114,55 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public Optional<ResetPasswordToken> generatePasswordResetToken(PasswordResetLinkRequest passwordResetLinkRequest) {
-        return Optional.empty();
+        String email = passwordResetLinkRequest.getEmail();
+        return userService.findByEmail(email)
+                .map(user -> {
+                    ResetPasswordToken passwordResetToken = new ResetPasswordToken();
+                    passwordResetToken.setToken(UUID.randomUUID().toString());
+                    passwordResetToken.setExpiryDate(Instant.now().plusMillis(expiration));
+                    passwordResetToken.setUserId(user.getId());
+                    resetPasswordTokenService.save(passwordResetToken);
+                    return Optional.of(passwordResetToken);
+                }).orElseThrow(() -> APIException.from(HttpStatus.NOT_FOUND)
+                        .withMessage("No matching user found for the given request"));
     }
 
     @Override
-    public Optional<String> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
+    public Optional<RefreshTokenEntity> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
         String refreshToken = jwtUtil.generateToken(customUser.getUserName(), customUser.getAuthorities(),
                 customUser.getFullName(), customUser.getPaths(), customUser.getId());
-        return Optional.empty();
+        return Optional.of(refreshTokenService.findByToken(refreshToken)
+            .map(rf -> {
+                if (jwtUtil.isTokenExpired(refreshToken)) {
+                    throw APIException.from(HttpStatus.BAD_REQUEST).withCode(UNAUTHORIZED);
+                }
+                refreshTokenService.increaseCount(rf);
+                return rf;
+            }).orElseThrow(() -> APIException.from(HttpStatus.NOT_FOUND)
+                    .withMessage("Missing refresh token in database.Please login again")));
     }
 
     @Override
-    public Optional<RefreshTokenEntity> createAndPersistRefreshTokenForDevice(Authentication authentication, LoginRequest loginRequest) {
-        return Optional.empty();
+    public Optional<UserEntity> updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
+
+        Optional<UserEntity> userEntity = userService.findById(customUser.getId());
+        if (userEntity.isEmpty()) {
+            throw APIException.from(HttpStatus.NOT_FOUND).withCode(USER_NOT_FOUND);
+        }
+
+        if (!bCryptPasswordEncoder.matches(userEntity.get().getPassword(),
+                updatePasswordRequest.getOldPassword())) {
+            throw APIException.from(HttpStatus.BAD_REQUEST);
+        }
+
+        String newPassword = bCryptPasswordEncoder.encode(updatePasswordRequest.getNewPassword());
+        userEntity.get().setPassword(newPassword);
+        userService.save(userEntity.get());
+
+        return Optional.of(userEntity.get());
     }
 }

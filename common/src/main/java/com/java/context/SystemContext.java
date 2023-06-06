@@ -1,10 +1,22 @@
 package com.java.context;
 
+import java.util.List;
+
 public class SystemContext {
     private String userId;
     private String userName;
     private String fullName;
-    private String path;
+    private String email;
+    private List<String> paths;
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUserId() {
         return userId;
@@ -30,11 +42,11 @@ public class SystemContext {
         this.fullName = fullName;
     }
 
-    public String getPath() {
-        return path;
+    public List<String> getPaths() {
+        return paths;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPaths(List<String> paths) {
+        this.paths = paths;
     }
 }

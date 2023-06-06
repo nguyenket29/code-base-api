@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<UserEntity> findById(String id);
+    Optional<UserEntity> findByEmail(String email);
     UserEntity save(UserEntity user);
     List<RoleEntity> getRoleByUserId(String userId);
     Optional<UserEntity> findByUsernameAndStatus(String username, short status);
