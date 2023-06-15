@@ -5,22 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ad2feab-68dd-4d58-a2e1-2404dbf45c78" name="Changes" comment="create project">
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/com/java/aop/LoggingAspect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/com/java/aop/LoggingFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/com/java/auth/AuditAwareImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/com/java/auth/AuditConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/main/java/com/java/request/UpdatePasswordRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/com/java/schedule/JobScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/entity/src/main/java/com/java/entities/job/JobEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/entity/src/main/java/com/java/entities/job/JobLogEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/repository/src/main/java/com/java/job/JobLogRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/repository/src/main/java/com/java/job/JobRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/src/main/java/com/java/impl/job/JobBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/src/main/java/com/java/impl/job/JobDefault.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/src/main/java/com/java/impl/job/JobExample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/java/context/SystemContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/java/context/SystemContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/java/context/SystemContextHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/java/context/SystemContextHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/src/main/java/com/java/web/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/controller/src/main/java/com/java/web/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/controller/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/com/java/common/Commons.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/com/java/common/Commons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/com/java/auth/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/com/java/auth/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/src/main/java/com/java/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/service/src/main/java/com/java/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/src/main/java/com/java/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/service/src/main/java/com/java/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/src/main/java/com/java/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/service/src/main/java/com/java/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/src/main/java/com/java/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/service/src/main/java/com/java/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,44 +54,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "corretto-11",
-    "last_opened_file_path": "G:/Private/code-base-api/core/src/main/java/com/java/aop",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
-    "spring.configuration.checksum": "148b5327ff6c58a4c10cfa01d2653dbb",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-11&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Private/SpringBoot Base/code-base-api/core/src/main/java/com/java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Mappings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;25deeee7d9f689250b009e5b1b6022ea&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Private\SpringBoot Base\code-base-api\core\src\main\java\com\java" />
+      <recent name="G:\Private\SpringBoot Base\code-base-api\model\src\main\java\com\java" />
+      <recent name="G:\Private\SpringBoot Base\code-base-api\entity\src\main\java\com\java\entities" />
       <recent name="G:\Private\code-base-api\core\src\main\java\com\java\aop" />
       <recent name="G:\Private\code-base-api\core\src\main\java\com\java\auth" />
-      <recent name="G:\Private\code-base-api\core\src\main\java\com\java\auth\repository" />
-      <recent name="G:\Private\code-base-api\core\src\main\java\com\java\auth\entity" />
-      <recent name="G:\Private\code-base-api\core\src\main\java\com\java\request" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.java.job" />
+      <recent name="com.java.entities.job" />
       <recent name="com.java.web" />
       <recent name="com.java.auth" />
       <recent name="com.java.impl" />
-      <recent name="com.java.auth.service.impl" />
-      <recent name="com.java.auth.service" />
     </key>
   </component>
   <component name="RunManager">
@@ -151,6 +149,11 @@
       <workItem from="1685953789002" duration="405000" />
       <workItem from="1685954884251" duration="487000" />
       <workItem from="1686036154508" duration="1226000" />
+      <workItem from="1686126468891" duration="1324000" />
+      <workItem from="1686127838167" duration="2505000" />
+      <workItem from="1686130390263" duration="1836000" />
+      <workItem from="1686185215282" duration="2919000" />
+      <workItem from="1686814296740" duration="1599000" />
     </task>
     <servers />
   </component>
@@ -161,6 +164,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
